@@ -1,0 +1,4 @@
+import Nav from "@/components/Nav";
+import CourseCard from "@/components/CourseCard";
+import { courses } from "@/lib/data";
+export default function Courses(){return <><Nav/><main className="container section"><div className="pill">COURSE LIBRARY</div><h1 className="section-title">Explore courses</h1><p className="muted">Learn in-demand skills from beginner to advanced.</p><div style={{display:"flex",gap:9,flexWrap:"wrap",margin:"28px 0"}}>{["All","Development","AI & Machine Learning","Data","Cloud","Cybersecurity"].map(x=><span className="pill" key={x}>{x}</span>)}</div><div className="course-grid">{courses.map(c=><CourseCard key={c.id} course={c}/>)}</div></main></>}
