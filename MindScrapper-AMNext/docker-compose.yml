@@ -1,0 +1,28 @@
+# ─────────────────────────────────────────────────────────────
+#  docker-compose.yml
+#  Local PostgreSQL for development — no Neon account needed
+#  to get started. Run: docker compose up -d
+# ─────────────────────────────────────────────────────────────
+version: "3.9"
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: MindScrapper-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: MindScrapper
+      POSTGRES_PASSWORD: MindScrapper
+      POSTGRES_DB: MindScrapper
+    ports:
+      - "5432:5432"
+    volumes:
+      - MindScrapper_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U MindScrapper"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  MindScrapper_pgdata:
