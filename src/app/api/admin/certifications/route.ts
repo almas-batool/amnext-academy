@@ -62,7 +62,7 @@ export async function POST(req: NextRequest) {
 
         price: new Prisma.Decimal(data.price),
 
-        currency: data.currency,
+        currency: "USD",
 
         thumbnail: data.thumbnailUrl,
 

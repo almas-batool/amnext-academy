@@ -23,6 +23,7 @@ import { PDFPanel } from "./pdf-panel";
 import { CodePanel } from "./code-panel-old";
 import { AIChatPanel } from "./ai-chat-panel";
 import { NotesPanel } from "./notes-panel";
+import { ListenToNotes } from "./listen-to-notes";
 import {
   AssessmentsPanel,
   type WorkspaceAssessment,
@@ -188,8 +189,11 @@ export function WorkspaceClient({
                 )}
               </TabsTrigger>
             </TabsList>
-            <TabsContent value="notes" className="flex-1 overflow-hidden m-0">
-              <NotesPanel chapter={chapter} />
+            <TabsContent value="notes" className="flex-1 overflow-hidden m-0 flex flex-col">
+              <ListenToNotes content={chapter?.content ?? null} />
+              <div className="min-h-0 flex-1">
+                <NotesPanel chapter={chapter} />
+              </div>
             </TabsContent>
             <TabsContent value="pdf" className="flex-1 overflow-hidden m-0">
               <PDFPanel pdfUrl={chapter?.pdfUrl ?? null} />

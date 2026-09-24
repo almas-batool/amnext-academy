@@ -12,16 +12,17 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-/** Format a number as INR or USD currency. */
+/** Format a monetary amount consistently as USD. */
 export function formatCurrency(
   amount: number,
-  currency = "USD",
-  locale = "en-IN",
+  _currency = "USD",
+  _locale = "en-US",
 ): string {
-  return new Intl.NumberFormat(locale, {
+  return new Intl.NumberFormat("en-US", {
     style: "currency",
-    currency,
-    maximumFractionDigits: 0,
+    currency: "USD",
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
   }).format(amount);
 }
 

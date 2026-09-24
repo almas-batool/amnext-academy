@@ -13,7 +13,7 @@ export const certificationSchema = z.object({
 
   price: z.coerce.number().min(0),
 
-  currency: z.enum(["USD", "USD"]),
+  currency: z.literal("USD"),
 
   thumbnailUrl: z.string().url(),
 });

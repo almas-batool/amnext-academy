@@ -25,7 +25,7 @@ const schema = z.object({
 
   price: z.coerce.number().min(0),
 
-  currency: z.enum(["USD", "USD"]),
+  currency: z.literal("USD"),
 
   duration: z.coerce.number().optional(),
 
@@ -145,8 +145,6 @@ export function CertificationForm() {
                 {...register("currency")}
                 className="w-full border rounded-md h-10 bg-background px-3"
               >
-                <option value="USD">INR</option>
-
                 <option value="USD">USD</option>
               </select>
             </div>

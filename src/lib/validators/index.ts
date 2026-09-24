@@ -47,7 +47,7 @@ export const certificationSchema = z.object({
   category:        z.string().min(1),
   difficulty:      z.enum(["BEGINNER", "INTERMEDIATE", "ADVANCED"]),
   price:           z.number().min(0),
-  currency:        z.string().default("USD"),
+  currency:        z.literal("USD"),
   learningOutcomes: z.array(z.string()).min(1),
   prerequisites:   z.array(z.string()).default([]),
   tags:            z.array(z.string()).default([]),

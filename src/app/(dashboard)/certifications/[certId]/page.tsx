@@ -252,7 +252,7 @@ export default async function CertDetailPage({
                       formatCurrency(Number(cert.price), cert.currency)
                     )}
                   </div>
-                  {cert.currency === "USD" && Number(cert.price) > 0 && (
+                  {Number(cert.price) > 0 && (
                     <p className="text-xs text-muted-foreground mt-1">
                       incl. GST
                     </p>
@@ -274,7 +274,7 @@ export default async function CertDetailPage({
                   <EnrollButton
                     certId={cert.id}
                     price={Number(cert.price)}
-                    currency={cert.currency}
+                    currency="USD"
                     certTitle={cert.title}
                     isLoggedIn={!!session}
                   />

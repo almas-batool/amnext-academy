@@ -120,7 +120,7 @@ export function EnrollButton({
 
         {price === 0
           ? "Enroll for Free"
-          : `Buy for ${formatCurrency(price, currency)}`}
+          : `Buy for ${formatCurrency(price, "USD")}`}
     </Button>
   );
 }

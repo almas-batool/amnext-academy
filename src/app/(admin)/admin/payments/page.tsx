@@ -6,7 +6,7 @@ import { prisma } from "@/lib/prisma";
 import { Badge }  from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { formatCurrency, formatDate } from "@/lib/utils";
-import { IndianRupee, CheckCircle2, Clock, XCircle, RotateCcw } from "lucide-react";
+import { DollarSign, CheckCircle2, Clock, XCircle, RotateCcw } from "lucide-react";
 
 export const metadata = { title: "Payments" };
 
@@ -55,9 +55,9 @@ export default async function AdminPaymentsPage() {
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <Card>
           <CardContent className="pt-5">
-            <IndianRupee className="w-4 h-4 text-emerald-400 mb-2" />
+            <DollarSign className="w-4 h-4 text-emerald-400 mb-2" />
             <p className="text-2xl font-bold text-emerald-400">
-              ${Number(completed?._sum.amount ?? 0).toLocaleString()}
+              {formatCurrency(Number(completed?._sum.amount ?? 0))}
             </p>
             <p className="text-xs text-muted-foreground">Total Revenue ({completed?._count ?? 0})</p>
           </CardContent>
@@ -114,7 +114,7 @@ export default async function AdminPaymentsPage() {
                     <Badge variant="outline" className="text-[10px]">{p.gateway}</Badge>
                   </td>
                   <td className="px-4 py-3 font-medium">
-                    {formatCurrency(Number(p.amount), p.currency)}
+                    {formatCurrency(Number(p.amount))}
                   </td>
                   <td className="px-4 py-3">
                     <Badge variant={cfg.variant} className="gap-1 text-[10px]">

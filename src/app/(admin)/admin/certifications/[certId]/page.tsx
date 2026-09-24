@@ -3,6 +3,7 @@ import Link from "next/link";
 
 import { prisma } from "@/lib/prisma";
 import { getAuthSession } from "@/lib/auth";
+import { formatCurrency } from "@/lib/utils";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
@@ -13,7 +14,7 @@ import {
   BookOpen,
   ClipboardCheck,
   Users,
-  IndianRupee,
+  DollarSign,
   Pencil,
   BarChart3,
   Rocket,
@@ -147,10 +148,10 @@ export default async function CertificationDetailsPage({ params }: Props) {
 
         <Card>
           <CardContent className="pt-6">
-            <IndianRupee className="w-8 h-8 text-primary mb-3" />
+            <DollarSign className="w-8 h-8 text-primary mb-3" />
 
             <h2 className="text-3xl font-bold">
-              ${Number(revenue._sum.amount ?? 0).toLocaleString()}
+              {formatCurrency(Number(revenue._sum.amount ?? 0))}
             </h2>
 
             <p className="text-muted-foreground">Revenue</p>
@@ -173,7 +174,7 @@ export default async function CertificationDetailsPage({ params }: Props) {
           </p>
 
           <p>
-            <strong>Price:</strong> ${Number(cert.price)}
+            <strong>Price:</strong> {formatCurrency(Number(cert.price))}
           </p>
 
           <p>

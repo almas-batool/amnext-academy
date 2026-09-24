@@ -56,7 +56,7 @@ export async function POST(
   return NextResponse.json({
     requiresPayment: true,
     price:    cert.price,
-    currency: cert.currency,
+    currency: "USD",
     certId:   cert.id,
     title:    cert.title,
   });

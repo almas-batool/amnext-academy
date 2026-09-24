@@ -143,7 +143,6 @@ export default function CreateCoursePage() {
                 <Select defaultValue="USD" onValueChange={(v) => setValue("currency", v)}>
                   <SelectTrigger><SelectValue /></SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="USD">INR ($)</SelectItem>
                     <SelectItem value="USD">USD ($)</SelectItem>
                   </SelectContent>
                 </Select>

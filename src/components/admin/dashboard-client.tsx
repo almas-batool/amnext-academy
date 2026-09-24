@@ -23,7 +23,7 @@ import {
   BookOpen,
   Award,
   CheckCircle2,
-  IndianRupee,
+  DollarSign,
 } from "lucide-react";
 import { formatCurrency, formatDate } from "@/lib/utils";
 
@@ -68,9 +68,9 @@ export function AdminDashboardClient() {
       bg: "bg-violet-500/10",
     },
     {
-      label: "Revenue (INR)",
-      value: `$${(d?.totalRevenue ?? 0).toLocaleString()}`,
-      icon: IndianRupee,
+      label: "Revenue (USD)",
+      value: formatCurrency(d?.totalRevenue ?? 0),
+      icon: DollarSign,
       color: "text-emerald-400",
       bg: "bg-emerald-500/10",
     },
@@ -159,12 +159,12 @@ export function AdminDashboardClient() {
                   tick={{ fontSize: 12, fill: "hsl(var(--muted-foreground))" }}
                 />
                 <YAxis
-                  tickFormatter={(v) => `$${v.toLocaleString()}`}
+                  tickFormatter={(v) => formatCurrency(Number(v))}
                   tick={{ fontSize: 12, fill: "hsl(var(--muted-foreground))" }}
                 />
                 <Tooltip
                   formatter={(v: number) => [
-                    `$${v.toLocaleString()}`,
+                    formatCurrency(Number(v)),
                     "Revenue",
                   ]}
                   contentStyle={{
