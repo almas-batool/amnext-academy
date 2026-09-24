@@ -77,8 +77,8 @@ export function HeroSection() {
               </Link>
             </Button>
             <Button asChild size="xl" variant="outline" className="gap-2">
-              <Link href="/certifications">
-                <Award className="w-4 h-4" /> Browse Certifications
+              <Link href="/courses">
+                <Award className="w-4 h-4" /> Browse Courses
               </Link>
             </Button>
           </div>

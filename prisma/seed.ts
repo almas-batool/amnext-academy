@@ -9,6 +9,7 @@ import {
   QuestionType,
 } from "@prisma/client";
 import bcrypt from "bcryptjs";
+import { seedCourses } from "./seed-courses";
 
 const prisma = new PrismaClient();
 
@@ -58,6 +59,11 @@ async function main() {
     },
   });
 
+  const seededCourses = await seedCourses(prisma, instructor.id);
+  const jsCert = seededCourses.get("javascript-mastery")!;
+
+  // Legacy fixture retained below as source context; the deterministic catalog above owns certification data.
+  if (false) {
   // ── Certifications ─────────────────────────────────────────────
   const jsCert = await prisma.certification.upsert({
     where: { slug: "javascript-fundamentals" },
@@ -448,6 +454,8 @@ const [user, posts] = await Promise.all([
       },
     },
   });
+
+  }
 
   // ── Coding Problems ────────────────────────────────────────────
   await prisma.codingProblem.upsert({

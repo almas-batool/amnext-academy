@@ -17,7 +17,7 @@ export function LandingFooter() {
             <p className="text-sm text-muted-foreground">AI-powered certification platform for the next generation of developers.</p>
           </div>
           {[
-            { title: "Platform",  links: [{ href: "/certifications", label: "Certifications" }, { href: "/coding", label: "Coding Practice" }, { href: "/community", label: "Community" }] },
+            { title: "Platform",  links: [{ href: "/courses", label: "Courses" }, { href: "/coding", label: "Coding Practice" }, { href: "/community", label: "Community" }] },
             { title: "Company",   links: [{ href: "/about", label: "About" }, { href: "/blog", label: "Blog" }, { href: "/careers", label: "Careers" }] },
             { title: "Legal",     links: [{ href: "/privacy", label: "Privacy Policy" }, { href: "/terms", label: "Terms of Service" }, { href: "/refunds", label: "Refund Policy" }] },
           ].map(col => (

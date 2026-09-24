@@ -1,12 +1,11 @@
 // ─────────────────────────────────────────────────────────────
 // src/components/certification/enroll-button.tsx
-// Handles free enrollment, Razorpay (INR) and Stripe (USD).
+// Handles free enrollment and Stripe checkout.
 // ─────────────────────────────────────────────────────────────
 "use client";
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import Script from "next/script";
 import { Loader2, ShoppingCart } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -19,12 +18,6 @@ interface EnrollButtonProps {
   currency: string;
   certTitle: string;
   isLoggedIn: boolean;
-}
-
-declare global {
-  interface Window {
-    Razorpay: any;
-  }
 }
 
 export function EnrollButton({
@@ -75,103 +68,7 @@ export function EnrollButton({
         return;
       }
 
-      // ==========================
-      // Razorpay (INR)
-      // ==========================
-      if (currency === "USD") {
-        const orderRes = await fetch("/api/payments/create-order", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            certId,
-            gateway: "RAZORPAY",
-          }),
-        });
-
-        const orderJson = await orderRes.json();
-
-        if (!orderRes.ok) {
-          toast({
-            title: "Payment Error",
-            description: orderJson.error,
-            variant: "destructive",
-          });
-          return;
-        }
-
-        const { orderId, amount, keyId, userName, userEmail } = orderJson.data;
-
-        const razorpay = new window.Razorpay({
-          key: keyId,
-          amount,
-          currency: "USD",
-          name: "AMNext Academy",
-          description: certTitle,
-          order_id: orderId,
-
-          prefill: {
-            name: userName,
-            email: userEmail,
-          },
-
-          theme: {
-            color: "#6366f1",
-          },
-
-          handler: async (response: any) => {
-            const verifyRes = await fetch("/api/payments/verify", {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({
-                certId,
-                razorpay_order_id: response.razorpay_order_id,
-                razorpay_payment_id: response.razorpay_payment_id,
-                razorpay_signature: response.razorpay_signature,
-              }),
-            });
-
-            const verifyJson = await verifyRes.json();
-
-            if (!verifyRes.ok) {
-              toast({
-                title: "Payment Verification Failed",
-                description:
-                  verifyJson.error ?? "Your payment could not be verified.",
-                variant: "destructive",
-              });
-              return;
-            }
-
-            toast({
-              title: "Payment Successful 🎉",
-              description: "You are now enrolled.",
-            });
-
-            router.push(`/certifications/${certId}/learn`);
-            router.refresh();
-          },
-
-          modal: {
-            ondismiss: () => {
-              toast({
-                title: "Payment Cancelled",
-              });
-            },
-          },
-        });
-
-        razorpay.open();
-      }
-
-      // ==========================
-      // Stripe (USD)
-      // ==========================
-      else {
-        const paymentRes = await fetch("/api/payments/create-order", {
+      const paymentRes = await fetch("/api/payments/create-order", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -193,8 +90,7 @@ export function EnrollButton({
           return;
         }
 
-        window.location.href = paymentJson.data.checkoutUrl;
-      }
+      window.location.href = paymentJson.data.checkoutUrl;
     } catch (err) {
       console.error(err);
 
@@ -209,13 +105,7 @@ export function EnrollButton({
   }
 
   return (
-    <>
-      <Script
-        src="https://checkout.razorpay.com/v1/checkout.js"
-        strategy="afterInteractive"
-      />
-
-      <Button
+    <Button
         onClick={handleEnroll}
         disabled={loading}
         className="w-full"
@@ -231,8 +121,7 @@ export function EnrollButton({
         {price === 0
           ? "Enroll for Free"
           : `Buy for ${formatCurrency(price, currency)}`}
-      </Button>
-    </>
+    </Button>
   );
 }
 

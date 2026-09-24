@@ -12,7 +12,7 @@ export function LandingNav() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const links = [
     { href: "#features", label: "Features" },
-    { href: "#certifications", label: "Certifications" },
+    { href: "/courses", label: "Courses" },
     { href: "#pricing",  label: "Pricing" },
     { href: "/community", label: "Community" },
   ];

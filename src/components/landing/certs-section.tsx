@@ -20,13 +20,13 @@ export async function CertsSection() {
       <div className="max-w-7xl mx-auto">
         <div className="flex items-end justify-between mb-12">
           <div>
-            <h2 className="text-4xl font-bold mb-2">Popular Certifications</h2>
+            <h2 className="text-4xl font-bold mb-2">Popular Courses</h2>
             <p className="text-muted-foreground">
               Industry-recognised credentials to advance your career
             </p>
           </div>
           <Button asChild variant="outline" className="gap-2 hidden md:flex">
-            <Link href="/certifications">
+            <Link href="/courses">
               View all <ArrowRight className="w-4 h-4" />
             </Link>
           </Button>
@@ -34,7 +34,7 @@ export async function CertsSection() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {certs.map((cert) => (
-            <Link key={cert.id} href={`/certifications/${cert.id}`}>
+            <Link key={cert.id} href={`/courses/${cert.id}`}>
               <div className="rounded-xl border border-border bg-card hover:border-primary/40 hover:shadow-lg transition-all overflow-hidden group">
                 {cert.thumbnail && (
                   <img
