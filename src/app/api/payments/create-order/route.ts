@@ -40,33 +40,67 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-      apiVersion: "2024-04-10" as any,
+    const stripeSecretKey = process.env.STRIPE_SECRET_KEY?.trim();
+    if (!stripeSecretKey || (!stripeSecretKey.startsWith("sk_test_") && !stripeSecretKey.startsWith("sk_live_"))) {
+      console.error("Stripe checkout is not configured with a valid server secret key.");
+      return NextResponse.json(
+        { error: "Stripe checkout is not configured. Add a valid STRIPE_SECRET_KEY on the server." },
+        { status: 503 },
+      );
+    }
+
+    const amount = Math.round(Number(cert.price) * 100);
+    if (!Number.isSafeInteger(amount) || amount <= 0) {
+      return NextResponse.json(
+        { error: "This course has an invalid price." },
+        { status: 400 },
+      );
+    }
+
+    const appUrl = (process.env.NEXT_PUBLIC_APP_URL?.trim() || new URL(req.url).origin).replace(/\/$/, "");
+    let baseUrl: URL;
+    try {
+      baseUrl = new URL(appUrl);
+      if (!/^https?:$/.test(baseUrl.protocol)) throw new Error("Unsupported URL protocol");
+    } catch {
+      console.error("Stripe checkout has an invalid NEXT_PUBLIC_APP_URL.");
+      return NextResponse.json(
+        { error: "Stripe checkout is not configured with a valid application URL." },
+        { status: 503 },
+      );
+    }
+
+    const stripe = new Stripe(stripeSecretKey, {
+      apiVersion: "2025-03-31.basil" as any,
+      timeout: 20_000,
+      maxNetworkRetries: 2,
     });
 
     const sessionCheckout = await stripe.checkout.sessions.create({
       mode: "payment",
-      payment_method_types: ["card"],
+      managed_payments: { enabled: true },
 
       line_items: [
         {
           quantity: 1,
           price_data: {
             currency: "usd",
-            unit_amount: Math.round(Number(cert.price) * 100),
+            unit_amount: amount,
             product_data: {
               name: cert.title,
               description: cert.description ?? undefined,
+              // Managed Payments requires a tax code for digitally delivered courses.
+              tax_code: "txcd_10000000",
             },
           },
         },
       ],
 
       success_url:
-        `${process.env.NEXT_PUBLIC_APP_URL}/payments/success?session_id={CHECKOUT_SESSION_ID}`,
+        `${baseUrl.origin}/payments/success?session_id={CHECKOUT_SESSION_ID}`,
 
       cancel_url:
-        `${process.env.NEXT_PUBLIC_APP_URL}/certifications/${cert.id}`,
+        `${baseUrl.origin}/certifications/${cert.id}`,
 
       metadata: {
         userId: session.user.id,
@@ -92,10 +126,11 @@ export async function POST(req: NextRequest) {
       },
     });
   } catch (error) {
-    console.error("Stripe checkout error:", error);
+    const message = error instanceof Error ? error.message : "Unknown Stripe error";
+    console.error("Stripe checkout error:", message);
 
     return NextResponse.json(
-      { error: "Unable to create checkout session" },
+      { error: "Unable to create checkout session. Verify the server Stripe configuration and try again." },
       { status: 500 }
     );
   }
